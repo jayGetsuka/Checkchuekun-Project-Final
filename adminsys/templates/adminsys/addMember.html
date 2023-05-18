@@ -1,0 +1,72 @@
+{% extends 'adminsys/main.html' %}
+{% load static %}
+{% block title %} Add Member {% endblock %}
+{% block body %}
+<section class="h-screen">
+    {% include 'adminsys/components/messages.html' %}
+    <div class="h-full text-gray-800">
+    {% if user.is_superuser and user.is_authenticated %}
+        <div class="grid grid-cols-6">
+        {% include 'adminsys/components/sidebar.html' %}
+            <div class="relative grid col-span-5 bg-zinc-100 ">
+                <div class="w-full">
+                    <div class="w-4/5 mx-auto border p-12 rounded-md bg-white my-12">
+                        <h1 class="md:text-left text-center text-2xl font-semibold">เพิ่มสมาชิก</h1>
+                        <p class="text-gray-500 text-sm mt-2">การเพิ่มสมาชิกสิ่งที่จำเป็นต้องกรอกมีดังนี้ <span class="text-blue-600"> ชื่อผู้ใช้ รหัสผ่าน อีเมลล์ ชื่อ-นามสกุล รูปโปรไฟล์</span> โดยนอกนั้นไม่จำเป็นต้องกรอกก็ได้</p>
+                        <hr class="my-4">
+                        <form action="{% url 'add_member_for_admin' %}" method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="grid grid-cols-6 gap-2 ">
+                                <span class="grid content-center">ชื่อผู้ใช้</span>
+                                <input type="text" name="username" id="" class="border border-2 p-2 rounded-md md:col-start-2 md:col-span-3 col-start-3 col-span-4" required>
+                            </div>
+                            <hr class="my-4">
+                            <div class="grid grid-cols-6 gap-2 ">
+                                <span class="grid content-center">รหัสผ่าน</span>
+                                <input type="password" name="password" id="" class="border border-2 p-2 rounded-md md:col-start-2 md:col-span-3 col-start-3 col-span-4" required>
+                            </div>
+                            <hr class="my-4">
+                            <div class="grid grid-cols-6 gap-2 ">
+                                <span class="grid content-center">อีเมลล์</span>
+                                <input type="email" name="email" id="" class="border border-2 p-2 rounded-md md:col-start-2 md:col-span-3 col-start-3 col-span-4" required>
+                            </div>
+                            <hr class="my-4">
+                            <div class="grid grid-cols-6 gap-2 ">
+                                <span class="grid content-center">ชื่อ</span>
+                                <input type="text" name="fname" id="" class="border border-2 p-2 rounded-md md:col-start-2 md:col-span-3 col-start-3 col-span-4" required>
+                            </div>
+                            <hr class="my-4">
+                            <div class="grid grid-cols-6 gap-2 ">
+                                <span class="grid content-center">นามสกุล</span>
+                                <input type="text" name="lname" id="" class="border border-2 p-2 rounded-md md:col-start-2 md:col-span-3 col-start-3 col-span-4" required>
+                            </div>
+                            <hr class="my-4">
+                            <div class="grid grid-cols-6 gap-2 ">
+                                <span class="grid content-center">เบอร์มือถือ</span>
+                                <input type="tel" name="phone_no" id="" class="border border-2 p-2 rounded-md md:col-start-2 md:col-span-3 col-start-3 col-span-4">
+                            </div>
+                            <hr class="my-4">
+                            <div class="grid grid-cols-6 gap-2 ">
+                                <span class="grid content-center">ทีอยู่</span>
+                                <textarea name="address" id="address" cols="30" rows="5" class="border border-2 p-2 rounded-md md:col-start-2 md:col-span-3 col-start-3 col-span-4"></textarea>
+                            </div>
+                            <hr class="my-4">
+                            <div class="grid grid-cols-6 gap-2 ">
+                                <span class="grid content-center">รูปโปรไฟล์</span>
+                                <input type="file" name="profile" id="profile" class="border border-2 rounded-md md:col-start-2 md:col-span-3 col-start-3 col-span-4" required>
+                            </div>
+                            <hr class="my-4">
+                            <button class="bg-blue-600 hover:bg-blue-500 text-white px-6 py-2 rounded-md ">ยืนยัน</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% else %}
+
+        {% include 'adminsys/components/login_admin.html' %}
+        
+    {% endif %}
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends 'adminsys/main.html' %}
+{% load static %}
+{% block title %} Add Camera {% endblock %}
+{% block body %}
+<section class="h-screen">
+    {% include 'adminsys/components/messages.html' %}
+    <div class="h-full text-gray-800">
+    {% if user.is_superuser and user.is_authenticated %}
+        <div class="grid grid-cols-6">
+        {% include 'adminsys/components/sidebar.html' %}
+            <div class="relative grid col-span-5 bg-zinc-100 ">
+                <div class="w-full">
+                    <div class="w-4/5 mx-auto border p-12 rounded-md bg-white my-12">
+                        <h1 class="md:text-left text-center text-2xl font-semibold">เพิ่มกล้อง</h1>
+                        <p class="text-gray-500 text-sm mt-2">การเพิ่มกล้องจำเป็นต้องกรอกให้ครบทุกช่อง</p>
+                        <hr class="my-4">
+                        <form action="{% url 'add_camera_for_admin' %}" method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="grid grid-cols-6 gap-2 ">
+                                <span class="grid content-center">ห้องเรียน</span>
+                                <input type="text" name="room" id="" class="border border-2 p-2 rounded-md md:col-start-2 md:col-span-3 col-start-3 col-span-4" required>
+                            </div>
+                            <hr class="my-4">
+                            <div class="grid grid-cols-6 gap-2 ">
+                                <span class="grid content-center">ลิงก์</span>
+                                <input type="text" name="link" id="" class="border border-2 p-2 rounded-md md:col-start-2 md:col-span-3 col-start-3 col-span-4" required>
+                            </div>
+                            <hr class="my-4">
+                            <button class="bg-blue-600 hover:bg-blue-500 text-white px-6 py-2 rounded-md ">ยืนยัน</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% else %}
+
+        {% include 'adminsys/components/login_admin.html' %}
+        
+    {% endif %}
+    </div>
+</section>
+{% endblock %}

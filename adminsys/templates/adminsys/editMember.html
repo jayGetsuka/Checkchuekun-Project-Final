@@ -1,0 +1,77 @@
+{% extends 'adminsys/main.html' %}
+{% load static %}
+{% block title %} Edit Member {% endblock %}
+{% block body %}
+<section class="h-screen">
+    {% include 'adminsys/components/messages.html' %}
+    <div class="h-full text-gray-800">
+    {% if user.is_superuser and user.is_authenticated %}
+        <div class="grid grid-cols-6">
+        {% include 'adminsys/components/sidebar.html' %}
+            <div class="relative grid col-span-5 bg-zinc-100 ">
+                <div class="w-full">
+                    <div class="w-4/5 mx-auto border p-12 rounded-md bg-white my-12">
+                        <h1 class="text-2xl font-semibold">แก้ไขข้อมูลส่วนตัว</h1>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <img src="{% if users.profile.image %} {{ users.profile.image.url }} {% else %} {% static 'images/profile.png' %} {% endif %}" class="rounded-full md:max-h-48 ml-16 my-4">
+                                <div>
+                                    <form action="/adminsys/editImageProfileForAdmin/{{ users.id }}/" method="post" enctype="multipart/form-data">
+                                      {% csrf_token %}
+                                    <p class="text-xs">เลือกรูปโปรไฟล์</p>
+                                    <label>
+                                      <input required name="imgfile" type="file" class="my-4 text-sm text-grey-500 w-3/5 
+                                      file:mr-5 file:py-2 file:px-3
+                                      file:rounded-full file:border-0
+                                      file:text-sm file:font-medium
+                                      file:bg-blue-50 file:text-blue-700
+                                      hover:file:cursor-pointer hover:file:bg-amber-50
+                                    " />
+                                    </label>
+                                    <button type="submit" class="my-4 text-sm text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-4 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">ยืนยัน</button>
+                                    </form>
+                                  </div>
+                            </div>
+                            <div>
+                                <form action="#" method="post" enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                    <div class="relative z-0 mb-6 w-full group">
+                                        <input {% if users.email %} value="{{ users.email }}" {% endif %} type="email" id="disabled-input-2" aria-label="disabled input 2" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none  cursor-not-allowed"  disabled readonly>
+                                        <label for="floating_email" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">อีเมล</label>
+                                    </div>
+                                    <div class="grid grid-cols-2 gap-4">
+                                        <div class="relative z-0 mb-6 w-full group">
+                                          <input value="{{ users.first_name }}" type="text" name="firstname" id="firstname" class="block text-black py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required="">
+                                          <label for="firstname" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">ชื่อ</label>
+                                        </div>
+                                        <div class="relative z-0 mb-6 w-full group">
+                                          <input value="{{ users.last_name }}" type="text" name="lastname" id="lastname" class="block text-black py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required="">
+                                          <label for="lastname" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">นามสกุล</label>
+                                        </div>
+                                    </div>
+                                    <div class="relative z-0 mb-6 w-full group">
+                                      <input {% if users.profile.address %} value="{{ users.profile.address }}" {% endif %} type="text" name="address" id="address" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required="">
+                                      <label for="address" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">ที่อยู่</label>
+                                    </div>
+                                    <div class="grid md:grid-cols-2 md:gap-6">
+                                      <div class="relative z-0 mb-6 w-full group">
+                                          <input {% if users.profile.phone_no %} value="{{ users.profile.phone_no }}" {% endif %} type="tel" name="phone" id="phone" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required="">
+                                          <label for="floating_phone" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">เบอร์มือถือ (123-456-7890)</label>
+                                      </div>
+                      
+                                    <button type="submit" class="my-4 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">ยืนยัน</button>
+                                  </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% else %}
+
+        {% include 'adminsys/components/login_admin.html' %}
+        
+    {% endif %}
+    </div>
+</section>
+{% endblock %}

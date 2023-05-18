@@ -1,0 +1,57 @@
+{% extends 'teacher/main.html' %}
+{% load static %}
+{% block title %} Home {% endblock %}
+{% block body %}
+<section class="h-screen">
+  
+  {% include 'teacher/components/messages.html' %}
+    <div class="h-full text-gray-800">
+      {% include 'teacher/components/header.html' %}
+      {% if request.session.teacher is null %}
+      
+        {% include 'teacher/components/login_teacher.html' %}
+        
+      {% else %}
+      <div class="w-9/10 mx-auto border md:p-12 p-4 rounded-md ">
+        <h1 class="md:text-left text-center text-2xl font-semibold">ยืนยันการสมัคร</h1>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-12">
+            {% for user_un in user_unconfirm %}
+            <div class="grid grid-cols-10 gap-2 mb-4">
+              <img src="{% if user_un.image %} {{ user_un.image.url }} {% else %} {% static 'images/profile.png' %}  {% endif %}" alt="" class="w-12 rounded-full">
+              <div class="grid content-center col-start-2 col-span-2">
+                <button class="md:text-md text-sm text-left" onclick="Swal.fire({
+                  title: '{{ user_un.user.first_name }} {{ user_un.user.last_name }}',
+                  text: '{{ user_un.user.email }}',
+                  imageUrl: '{% if user_un.image %} {{ user_un.image.url }} {% else %} {% static 'images/profile.png' %} {% endif %}',
+                  imageWidth: 300,
+                  imageHeight: 300,
+                })">{{ user_un.user.first_name }} {{ user_un.user.last_name }}</button>
+                <p class="text-gray-600 md:text-sm text-xs">{{ user_un.user.email }}</p>
+              </div>
+                  <button class="bg-blue-600 hover:bg-blue-500 rounded-md text-white dark:col-start-6 dark:col-span-2 col-start-7 col-span-2 md:text-base text-xs" onclick="location.href='confirm_to_member/{{ user_un.user.id }}'">ยืนยัน</button>
+                  <button class="bg-red-600 hover:bg-red-500 rounded-md text-white dark:col-start-8 dark:col-span-2 col-start-9 col-span-2 md:text-base text-xs" 
+                  onclick="Swal.fire({
+                    title: 'คุณแน่ใจใช่ไหม',
+                    text: 'คุณจะไม่สามารถเปลี่ยนกลับได้ !',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    cancelButtonText: 'ยกเลิก',
+                    confirmButtonText: 'ใช่, ฉันต้องการลบคุณ {{ user_un.user.first_name }}'
+                  }).then((result) => {
+                    if (result.isConfirmed) {
+                      location.href='delete_user/{{ user_un.user.id }}'
+                    }}
+                  )">ลบ</button>
+            </div>
+            {% endfor %}
+
+        </div>
+      </div>
+      {% endif %}
+    </div>
+</section>
+
+{% endblock %}
+

@@ -1,0 +1,46 @@
+{% extends 'teacher/main.html' %}
+{% load static %}
+{% block title %} Add Course {% endblock %}
+{% block body %}
+    <section class="h-screen">
+        {% include 'teacher/components/messages.html' %}
+        <div class="h-full text-gray-800">
+        {% include 'teacher/components/header.html' %}
+        {% if request.session.teacher is null %}
+      
+            {% include 'teacher/components/login_teacher.html' %}
+        
+        {% else %}
+            <div class="w-4/5 mx-auto border p-12 rounded-md ">
+                <h1 class="md:text-left text-center text-2xl font-semibold">เพิ่มรายวิชา</h1>
+                <p class="text-gray-500 text-sm mt-2">เพิ่มรายวิชาเพื่อให้สมาชิกลงทะเบียนเข้ามาในรายวิชาและสามารถสแกนใบหน้าได้</p>
+                <hr class="my-6">
+                <form action="{% url 'add_course' %}" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="grid grid-cols-6 gap-2 ">
+                        <span class="grid content-center">รหัสวิชา</span>
+                        <input type="text" name="subCode" id="" class="border border-2 p-2 rounded-md md:col-start-2 md:col-span-3 col-start-3 col-span-4" required>
+                    </div>
+                    <hr class="my-6">
+                    <div class="grid grid-cols-6 gap-2 ">
+                        <span class="grid content-center">ชื่อรายวิชา</span>
+                        <input type="text" name="subName" id="" class="border border-2 p-2 rounded-md md:col-start-2 md:col-span-3 col-start-3 col-span-4" required>
+                    </div>
+                    <hr class="my-6">
+                    <div class="grid grid-cols-6 gap-2 ">
+                        <span class="grid content-center">ห้องเรียน</span>
+                        <select name="subRoom" id="room" class="border border-2 p-2 rounded-md md:col-start-2 md:col-span-3 col-start-3 col-span-4" required>
+                                {% for room in rooms%}
+                                <option value="{{ room.NumberRoom }}">{{ room.NumberRoom }}</option>
+                                {% endfor %}
+                        </select>
+                    </div>
+                    <hr class="my-6">
+                    <button class="bg-blue-600 hover:bg-blue-500 text-white px-6 py-2 rounded-md ">ยืนยัน</button>
+                </form>
+
+            </div>
+        {% endif %}
+        </div>
+    </section>
+{% endblock %}

@@ -1,0 +1,37 @@
+<h1 class="mt-4 ml-12 text-3xl font-medium">Dashboard</h1>
+<div class="grid grid-cols-3 gap-12 w-5/6 ml-12 mt-4">
+    <div class="grid grid-cols-2 bg-blue-600 hover:bg-blue-500 rounded-lg hover:cursor-pointer">
+    <a href="/adminsys/showMember/1/">
+    <div class="grid grid-rows-2 justify-self-center p-4 text-white">
+        <p>สมาชิก</p>
+        <p class="text-2xl">{{ request.session.count_member }}</p>
+    </div>
+    </a>
+    <div class="flex items-center justify-self-center">
+        <svg aria-hidden="true" class="flex-shrink-0 w-12 text-white transition duration-75 " fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>
+    </div>
+    </div>
+    <div class="grid grid-cols-2 bg-yellow-500 hover:bg-yellow-400 rounded-lg hover:cursor-pointer">
+    <a href="/adminsys/showTeacher/1/">
+        <div class="grid grid-rows-2 justify-self-center p-4 text-white">
+            <p>อาจารย์</p>
+            <p class="text-2xl">{{ request.session.count_teacher }}</p>
+    </div>
+    </a>
+    <div class="flex items-center justify-self-center">
+        <svg aria-hidden="true" class="flex-shrink-0 w-12 text-white transition duration-75 " fill-rule="evenodd" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512" clip-rule="evenodd"><!-- Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path d="M160 64c0-35.3 28.7-64 64-64H576c35.3 0 64 28.7 64 64V352c0 35.3-28.7 64-64 64H336.8c-11.8-25.5-29.9-47.5-52.4-64H384V320c0-17.7 14.3-32 32-32h64c17.7 0 32 14.3 32 32v32h64V64L224 64v49.1C205.2 102.2 183.3 96 160 96V64zm0 256c-53 0-96-43-96-96s43-96 96-96s96 43 96 96s-43 96-96 96zm-26.7 32h53.3C260.3 352 320 411.7 320 485.3c0 14.7-11.9 26.7-26.7 26.7H26.7C11.9 512 0 500.1 0 485.3C0 411.7 59.7 352 133.3 352z"/></svg>
+    </div>
+    </div>
+    <div class="grid grid-cols-2 bg-red-600 hover:bg-red-500 rounded-lg hover:cursor-pointer">
+    <a href="/adminsys/showCamera/1/">
+        <div class="grid grid-rows-2 justify-self-center p-4 text-white">
+             <p>กล้อง</p>
+             <p class="text-2xl">{{ request.session.count_camera }}</p>
+        </div>
+    </a>
+    <div class="flex items-center justify-self-center">
+        <svg aria-hidden="true" class="flex-shrink-0 w-8 text-white transition duration-75 "  clip-rule="evenodd" fill-rule="evenodd" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path d="M149.1 64.8L138.7 96H64C28.7 96 0 124.7 0 160V416c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V160c0-35.3-28.7-64-64-64H373.3L362.9 64.8C356.4 45.2 338.1 32 317.4 32H194.6c-20.7 0-39 13.2-45.5 32.8zM256 384c-53 0-96-43-96-96s43-96 96-96s96 43 96 96s-43 96-96 96z"/></svg>
+    
+    </div>
+    </div>
+</div>

@@ -1,0 +1,68 @@
+{% extends 'adminsys/main.html' %}
+{% load static %}
+{% block title %} Edit Teacher {% endblock %}
+{% block body %}
+<section class="h-screen">
+    {% include 'adminsys/components/messages.html' %}
+    <div class="h-full text-gray-800">
+    {% if user.is_superuser and user.is_authenticated %}
+        <div class="grid grid-cols-6">
+        {% include 'adminsys/components/sidebar.html' %}
+            <div class="relative grid col-span-5 bg-zinc-100 ">
+                <div class="w-full">
+                    <div class="w-4/5 mx-auto border p-12 rounded-md bg-white my-12">
+                        <h1 class="md:text-left text-center text-2xl font-semibold">แก้ไขอาจารย์</h1>
+                        <p class="text-gray-500 text-sm mt-2">การแก้ไขอาจารย์สิ่งที่ไม่สามารถแก้ไขได้มีดังนี้ <span class="text-red-600"> ชื่อผู้ใช้  อีเมลล์ </span> โดยนอกนั้นสามารถแก้ไขได้</p>
+                        <hr class="my-4">
+                        <form action="#" method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="grid grid-cols-6 gap-2 ">
+                                <span class="grid content-center">ชื่อผู้ใช้</span>
+                                <input value="{{ teacher.username }}" type="text" name="username" id="" class="bg-transparent bg-gray-200 border border-2 p-2 rounded-md md:col-start-2 md:col-span-3 col-start-3 col-span-4 cursor-not-allowed" disabled readonly >
+                            </div>
+                            <hr class="my-4">
+                            <div class="grid grid-cols-6 gap-2 ">
+                                <span class="grid content-center">รหัสผ่าน</span>
+                                <input value="{{ teacher.password }}" type="password" name="password" id="" class="border border-2 p-2 rounded-md md:col-start-2 md:col-span-3 col-start-3 col-span-4" required>
+                            </div>
+                            <hr class="my-4">
+                            <div class="grid grid-cols-6 gap-2 ">
+                                <span class="grid content-center">อีเมลล์</span>
+                                <input value="{{ teacher.email }}" type="email" name="email" id="" class="bg-transparent bg-gray-200 border border-2 p-2 rounded-md md:col-start-2 md:col-span-3 col-start-3 col-span-4 cursor-not-allowed" disabled readonly >
+                            </div>
+                            <hr class="my-4">
+                            <div class="grid grid-cols-6 gap-2 ">
+                                <span class="grid content-center">ชื่อ</span>
+                                <input value="{{ teacher.firstname }}" type="text" name="fname" id="fname" class="border border-2 p-2 rounded-md md:col-start-2 md:col-span-3 col-start-3 col-span-4" required>
+                            </div>
+                            <hr class="my-4">
+                            <div class="grid grid-cols-6 gap-2 ">
+                                <span class="grid content-center">นามสกุล</span>
+                                <input value="{{ teacher.lastname }}" type="text" name="lname" id="lname" class="border border-2 p-2 rounded-md md:col-start-2 md:col-span-3 col-start-3 col-span-4" required>
+                            </div>
+                            <hr class="my-4">
+                            <div class="grid grid-cols-6 gap-2 ">
+                                <span class="grid content-center">เบอร์มือถือ</span>
+                                <input {% if teacher.phone_no %} value="{{ teacher.phone_no }}" {% endif %} type="tel" name="phone_no" id="" class="border border-2 p-2 rounded-md md:col-start-2 md:col-span-3 col-start-3 col-span-4">
+                            </div>
+                            <hr class="my-4">
+                            <div class="grid grid-cols-6 gap-2 ">
+                                <span class="grid content-center">สาขา</span>
+                                <input {% if teacher.department %} value="{{ teacher.department }}" {% endif %} type="text" name="department" id="" class="border border-2 p-2 rounded-md md:col-start-2 md:col-span-3 col-start-3 col-span-4">
+                            </div>
+                            <hr class="my-4">
+                            
+                            <button class="bg-blue-600 hover:bg-blue-500 text-white px-6 py-2 rounded-md ">ยืนยัน</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% else %}
+
+      {% include 'adminsys/components/login_admin.html' %}
+      
+    {% endif %}
+    </div>
+</section>
+{% endblock %}

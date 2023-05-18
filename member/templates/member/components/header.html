@@ -1,0 +1,37 @@
+{% load static %}
+<nav class="p-5 bg-white md:flex md:items-center md:justify-between font-bold z-10">
+    <div class="flex justify-between items-center ">
+        <span class="font-bold" style="font-family: 'Poppins', sans-serif;"><img src="{% static 'images/logo_project.png' %}" alt="" class="w-12 h-12 inline ">Checkchuekun</span> 
+
+      <span class="text-3xl cursor-pointer mx-2 md:hidden block text-gray-300">
+        <ion-icon name="menu" onclick="Menu(this)"></ion-icon>
+      </span>
+    </div>
+    {% if user.is_authenticated and not user.is_superuser and not user.is_staff %}
+    <ul class="text-lg text-gray-700 md:flex md:items-center z-10 md:static absolute bg-white w-full left-0 md:w-auto md:py-0 py-4 md:pl-0 pl-7 md:opacity-100 opacity-0 top-[-400px] transition-all ease-in duration-500" style="font-family: 'Kanit', sans-serif;">
+      <li class="mx-6 my-6 md:my-0">
+        <p class="text-gray-500 ">HI, {{ user.username }}</p>
+      </li>
+      <li class="mx-6 my-6 md:my-0">
+        <a href="/" class=" hover:text-blue-600 hover:decoration-solid hover:underline hover:underline-offset-8 hover:decoration-2">ข้อมูลส่วนตัว</a>
+      </li>
+      <li class="mx-6 my-6 md:my-0">
+        <a href="{% url 'course_reg' %}" {% if user.profile.approved %} class="hover:text-blue-600 hover:decoration-solid hover:underline hover:underline-offset-8 hover:decoration-2" {% else %} class="hover:text-gray-400 cursor-not-allowed" onclick="return false;" {% endif %}>ลงทะเบียนรายวิชา</a>
+      </li>
+      <li class="mx-6 my-6 md:my-0">
+        <a href="/history_enroll/1/" {% if user.profile.approved %} class="hover:text-blue-600 hover:decoration-solid hover:underline hover:underline-offset-8 hover:decoration-2" {% else %} class="hover:text-gray-400 cursor-not-allowed" onclick="return false;" {% endif %}>ประวัติการเข้าเรียน</a>
+      </li>
+      <li class="mx-6 my-6 md:my-0">
+        <a href="{% url 'logout' %}"  class="text-red-500 hover:text-red-600 hover:decoration-solid hover:underline hover:underline-offset-8 hover:decoration-2">ออกจากระบบ</a>
+      </li>
+      
+    </ul>
+    {% endif %}
+  </nav>
+
+  <script>
+    function Menu(e){
+      let list = document.querySelector('ul');
+      e.name === 'menu' ? (e.name = "close",list.classList.add('top-[80px]') , list.classList.add('opacity-100')) :( e.name = "menu" ,list.classList.remove('top-[80px]'),list.classList.remove('opacity-100'))
+    }
+  </script>

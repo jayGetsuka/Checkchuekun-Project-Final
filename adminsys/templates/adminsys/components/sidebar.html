@@ -1,0 +1,48 @@
+<aside class="w-full " aria-label="Sidebar">
+    <div class="overflow-y-auto py-4 px-3 bg-gray-50 h-screen">
+      <a href="#" class="flex items-center pl-2.5 mb-5">
+          <span class="self-center text-xl font-semibold whitespace-nowrap text-gray-800">Checkchukun</span>
+      </a>
+      <ul class="space-y-2">
+          <li>
+            <a href="{% url 'indexAd' %}" class="flex items-center p-2 text-base font-normal text-gray-600 rounded-lg hover:text-gray-700 hover:bg-gray-300">
+                <svg aria-hidden="true" class="w-6 h-6 text-gray-600 transition duration-75" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"></path><path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path></svg>
+                <span class="ml-3">Dashboard</span>
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'confirmUser_for_admin' %}" class="flex items-center p-2 text-base font-normal text-gray-600 rounded-lg hover:text-gray-700 hover:bg-gray-300">
+                <svg aria-hidden="true" class="flex-shrink-0 w-6 h-6 text-gray-600 transition duration-75" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M8.707 7.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l2-2a1 1 0 00-1.414-1.414L11 7.586V3a1 1 0 10-2 0v4.586l-.293-.293z"></path><path d="M3 5a2 2 0 012-2h1a1 1 0 010 2H5v7h2l1 2h4l1-2h2V5h-1a1 1 0 110-2h1a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V5z"></path></svg>
+                <span class="flex-1 ml-3 whitespace-nowrap">ยืนยันการสมัคร</span>
+                {% if request.session.count_user_unconfirm >= 1 %}
+                <span class="inline-flex justify-center items-center p-3 ml-3 w-3 h-3 text-sm font-medium text-red-600 bg-red-200 rounded-full">{{ request.session.count_user_unconfirm }}</span>
+                {% endif %}
+              </a>
+          </li>
+          <li>
+            <a href="{% url 'show_memebr_for_admin' 1 %}" class="flex items-center p-2 text-base font-normal text-gray-600 rounded-lg hover:text-gray-700 hover:bg-gray-300">
+                <svg aria-hidden="true" class="flex-shrink-0 w-6 h-6 text-gray-600 transition duration-75 " fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>
+                <span class="flex-1 ml-3 whitespace-nowrap">สมาชิก</span>
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'show_teacher_for_admin' 1 %}" class="flex items-center p-2 text-base font-normal text-gray-600 rounded-lg hover:text-gray-700 hover:bg-gray-300">
+                <svg aria-hidden="true" class="flex-shrink-0 w-6 h-6 text-gray-600 transition duration-75 " fill-rule="evenodd" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512" clip-rule="evenodd"><!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path d="M160 64c0-35.3 28.7-64 64-64H576c35.3 0 64 28.7 64 64V352c0 35.3-28.7 64-64 64H336.8c-11.8-25.5-29.9-47.5-52.4-64H384V320c0-17.7 14.3-32 32-32h64c17.7 0 32 14.3 32 32v32h64V64L224 64v49.1C205.2 102.2 183.3 96 160 96V64zm0 256c-53 0-96-43-96-96s43-96 96-96s96 43 96 96s-43 96-96 96zm-26.7 32h53.3C260.3 352 320 411.7 320 485.3c0 14.7-11.9 26.7-26.7 26.7H26.7C11.9 512 0 500.1 0 485.3C0 411.7 59.7 352 133.3 352z"/></svg>
+                <span class="flex-1 ml-3 whitespace-nowrap">อาจารย์</span>
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'show_camera_for_admin' 1 %}" class="flex items-center p-2 text-base font-normal text-gray-600 rounded-lg hover:text-gray-700 hover:bg-gray-300">
+                <svg aria-hidden="true" class="flex-shrink-0 w-6 h-6 text-gray-600 transition duration-75" fill-rule="evenodd" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" clip-rule="evenodd"><!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path d="M149.1 64.8L138.7 96H64C28.7 96 0 124.7 0 160V416c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V160c0-35.3-28.7-64-64-64H373.3L362.9 64.8C356.4 45.2 338.1 32 317.4 32H194.6c-20.7 0-39 13.2-45.5 32.8zM256 384c-53 0-96-43-96-96s43-96 96-96s96 43 96 96s-43 96-96 96z"/></svg>
+                <span class="flex-1 ml-3 whitespace-nowrap">กล้อง</span>
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'logout_for_admin' %}" class="flex items-center p-2 text-base font-normal text-gray-600 rounded-lg hover:text-white hover:bg-red-600">
+                <svg aria-hidden="true" class="flex-shrink-0 w-6 h-6 transition duration-75" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z" clip-rule="evenodd"></path></svg>
+                <span class="flex-1 ml-3 whitespace-nowrap">ออกจากระบบ</span>
+            </a>
+          </li>
+      </ul>
+    </div>
+  </aside>

@@ -1,0 +1,28 @@
+{% extends 'adminsys/main.html' %}
+{% load static %}
+{% block title %} Admin Dashboard {% endblock %}
+{% block body %}
+<section class="h-screen">
+  {% include 'adminsys/components/messages.html' %}
+    <div class="h-full text-gray-800">
+      
+      {% if user.is_superuser and user.is_authenticated %}
+
+      <div class="grid grid-cols-6">
+        {% include 'adminsys/components/sidebar.html' %}
+        <div class="relative grid col-span-5 bg-zinc-100 ">
+          <div class="w-full">
+            {% include 'adminsys/components/dashboard.html' %}
+
+          </div>
+        </div>
+      </div>
+        
+      {% else %}
+      
+        {% include 'adminsys/components/login_admin.html' %}
+
+      {% endif %}
+    </div>
+  </section>
+{% endblock %}

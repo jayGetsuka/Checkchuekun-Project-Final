@@ -1,0 +1,104 @@
+{% extends 'member/main.html' %}
+{% load static %}
+{% block title %} Course Register {% endblock %}
+{% block body %}
+
+
+<section class="h-screen">
+  {% include 'member/components/messages.html' %}
+    <div class="h-full text-gray-800">
+        {% include 'member/components/header.html' %}
+        {% if user.is_authenticated and not user.is_superuser and not user.is_staff %}
+        <p class="text-center text-2xl font-semibold" style="font-family: 'Kanit', sans-serif;">ประวัติการเข้าเรียน</p>
+            <!-- table show member -->
+            <div class="flex flex-col">
+                <div class="overflow-x-auto">
+                    <div class="py-4 inline-block min-w-full sm:px-6 lg:px-8">
+                    <div class="overflow-hidden">
+                        <table class="min-w-full text-center">
+                        <thead class="border-b bg-gray-800">
+                            <tr>
+                            <th scope="col" class="text-sm font-medium text-white px-6 py-4">
+                                #
+                            </th>
+                            <th scope="col" class="text-sm font-medium text-white px-6 py-4">
+                                รายวิชา
+                            </th>
+                            <th scope="col" class="text-sm font-medium text-white px-6 py-4">
+                                ห้องเรียน
+                            </th>
+                            <th scope="col" class="text-sm font-medium text-white px-6 py-4">
+                                วันที่
+                            </th>
+                            <th scope="col" class="text-sm font-medium text-white px-6 py-4">
+                                เวลา
+                            </th>
+                            <th scope="col" class="text-sm font-medium text-white px-6 py-4">
+                                ตรวจสอบ
+                            </th>
+                            </tr>
+                        </thead class="border-b">
+                        <tbody>
+                        {% for history in history_enroll %}
+                            <tr class="bg-white border-b hover:bg-gray-200">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ forloop.counter }}</td>
+                            <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                                {{ history.subject.SubjectName }}
+                            </td>
+                            <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                                {{ history.camera.NumberRoom }}
+                            </td>
+                            <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                                {{ history.date }}
+                            </td>
+                            <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                                {{ history.time|time:"H:i" }}
+                            </td>
+                            <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                                <button onclick="Swal.fire({
+                                    title: '{{ history.user.first_name}}' + ' ' + '{{ history.user.last_name}}',
+                                    text: '{{ history.time|time:"H:i" }} น.',
+                                    imageUrl: '/' + '{{ history.image }}',
+                                    imageWidth: 400,
+                                    imageHeight: 300,
+                                    imageAlt: 'Custom image',
+                                    })" class="text-blue-600 hover:text-blue-500">ตรวจสอบ
+                                </button>
+                            </td>
+
+                            </tr class="bg-white border-b">
+                            {% endfor %}
+                            
+                        </tbody>
+                        </table>
+                    </div>
+                    </div>
+                </div>
+            </div>
+            <!-- next and previous -->
+            <div class="flex justify-end w-[97%]">
+                <nav aria-label="Page navigation example">
+                  <ul class="flex list-style-none">
+                    {% if history_enroll.has_previous %}
+                    <li class="page-item my-4"><a
+                        class="page-link relative block py-1.5 px-3 rounded border-0 bg-transparent outline-none transition-all duration-300 rounded-lg text-white hover:text-black bg-black hover:bg-gray-200 focus:shadow-none fill-white hover:fill-black mr-4"
+                        href="/history_enroll/{{ history_enroll.previous_page_number }}/"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="mr-2 inline  w-4 relative top-[-2px]"><!-- Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path d="M512 256C512 114.6 397.4 0 256 0S0 114.6 0 256S114.6 512 256 512s256-114.6 256-256zM116.7 244.7l112-112c4.6-4.6 11.5-5.9 17.4-3.5s9.9 8.3 9.9 14.8l0 64 96 0c17.7 0 32 14.3 32 32l0 32c0 17.7-14.3 32-32 32l-96 0 0 64c0 6.5-3.9 12.3-9.9 14.8s-12.9 1.1-17.4-3.5l-112-112c-6.2-6.2-6.2-16.4 0-22.6z"/></svg>ก่อนหน้า</a></li>
+                    {% endif %}
+                    {% if history_enroll.has_next %}
+                    <li class="page-item my-4"><a
+                        class="page-link relative block py-1.5 px-3 rounded border-0 bg-transparent bg-black outline-none transition-all duration-300 rounded-lg text-white hover:text-black hover:bg-gray-200 focus:shadow-none fill-white hover:fill-black"
+                        href="/history_enroll/{{ history_enroll.next_page_number }}/">ถัดไป<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="ml-2 inline  w-4 relative top-[-2px]"><!-- Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path d="M0 256C0 397.4 114.6 512 256 512s256-114.6 256-256S397.4 0 256 0S0 114.6 0 256zm395.3 11.3l-112 112c-4.6 4.6-11.5 5.9-17.4 3.5s-9.9-8.3-9.9-14.8l0-64-96 0c-17.7 0-32-14.3-32-32l0-32c0-17.7 14.3-32 32-32l96 0 0-64c0-6.5 3.9-12.3 9.9-14.8s12.9-1.1 17.4 3.5l112 112c6.2 6.2 6.2 16.4 0 22.6z"/></svg></a>
+                    </li>
+                    {% endif %}
+                  </ul>
+                </nav>
+              </div>
+
+        {% else %}
+
+          {% include 'member/components/login_user.html' %}
+          
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

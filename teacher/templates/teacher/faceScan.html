@@ -1,0 +1,251 @@
+{% extends 'teacher/main.html' %}
+{% load static %}
+{% block title %} Class Member {% endblock %}
+{% block body %}
+<section class="h-screen">
+  {% include 'teacher/components/messages.html' %}
+    <div class="h-full text-gray-800">
+      {% include 'teacher/components/header.html' %}
+      {% if request.session.teacher is null %}
+      
+        {% include 'teacher/components/login_teacher.html' %}
+        
+      {% else %}
+      <div class="w-9/10 mx-auto border md:p-12 p-4 rounded-md ">
+        {% include 'teacher/components/header_roll_call.html' %}
+      </div>
+      
+      <iframe src="{{ subject.SubjectRoom.Link }}" frameborder="0" class="mt-2 ml-[35%] w-[500px] h-[300px]"></iframe>
+      <p class="text-center text-xl m-4" id="text-header-enroll">รายชื่อคนที่เข้าเรียน</p>
+
+      
+      
+      <div class="grid grid-cols-1 w-[95%] mx-auto gap-6 md:grid-cols-3 mb-6 z-0" id="showMemberCome">
+
+      </div>
+    
+    <div id="container-select-time">
+        <form id="time_to_scan">
+            <div class="flex justify-center">
+                <div
+                    class="relative mb-3 xl:w-96"
+                    data-te-format24="true"
+                    id="timepicker-format"
+                    data-te-input-wrapper-init >
+                    <input
+                        type="text"
+                        class="peer block min-h-[auto] w-full rounded-md border-solid border-[1px] border-gray-300 bg-transparent py-[0.32rem] px-3 leading-[2.15] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
+                        data-te-toggle="timepicker"
+                        id="time_value" 
+                        required />
+                    <label
+                        for="time_value"
+                        class="pointer-events-none absolute top-0 left-3 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[2.15] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[1.15rem] peer-focus:scale-[0.8] peer-focus:text-blue-600 peer-data-[te-input-state-active]:-translate-y-[1.15rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-neutral-200"
+                        >เลือกเวลา</label
+                    >
+                </div>
+            </div>
+            <button type="button"
+                onclick="startWebsocket()"
+                class="bg-blue-600 hover:bg-blue-700 my-3.5 text-white py-2 px-6 rounded-lg ml-[30%] md:ml-[45%] "
+                ><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" class="inline w-3.5 fill-white relative top-[-1px]"><!-- Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg>
+                <span class="ml-2">เริ่มการสแกน</span>
+            </button>
+        </form>
+    </div>
+
+    
+    
+
+    <script>
+        const picker = document.querySelector("#timepicker-format"); const
+        tpFormat24 = new te.Timepicker(picker, { format24: true, });
+    </script>
+
+    <script>
+      let memberList = [];
+        let enrolledDict = new Object();
+
+        let url = `ws://${window.location.host}/ws/roll-call/{{ subject.id }}/`
+        console.log(window.location.host)
+
+        const MemberSocket = new WebSocket(url)
+
+        MemberSocket.onmessage = function(e){
+            let data = JSON.parse(e.data);
+            console.log(data)
+
+            if(data.type == "roll-call"){
+
+                console.log(data.fullname);
+                memberList = memberList.filter(function(value) {
+                    return value !== (data.fullname).replace(/ /g, '_');
+                });
+                
+                enrolledDict[data.fullname] = [data.datetime, data.path];
+
+                let enrolled = document.getElementById("enrolled");
+                enrolled.innerHTML = data.enrolled + ' คน';
+
+                let not_attend = document.getElementById("not-attending");
+                not_attend.innerHTML = data.not_attend + ' คน';
+
+                let member = document.getElementById("showMemberCome");
+
+                if(member.className === "grid grid-cols-1 w-[95%] mx-auto gap-6 md:grid-cols-3 mb-6 z-0"){
+                    member.insertAdjacentHTML("beforeend", `
+                    <div class="grid grid-cols-3 p-4 drop-shadow-xl bg-gray-50 justify-items-center">
+                        <p>${data.fullname}</p>
+                        <p>${data.datetime} น.</p>
+                        <button onclick="Swal.fire({
+                            title: '${data.fullname}',
+                            text: '${data.datetime} น.',
+                            imageUrl: '${data.path}',
+                            imageWidth: 400,
+                            imageHeight: 300,
+                            imageAlt: 'Custom image',
+                            })" class="text-blue-600 hover:text-blue-500">ตรวจสอบ
+                        </button>
+                    </div>
+                    `)
+                }
+
+            }
+            else if(data.type == "allmember"){
+                
+                data_string = data.list_member;
+
+                let memlist = data_string.split(',');
+
+                memberList = memlist;
+
+                let not_attend = document.getElementById("not-attending");
+
+                not_attend.innerHTML = memberList.length + ' คน';
+
+                let element = document.getElementById("container-select-time");
+                
+                element.className = "hidden";
+
+            }
+            else if(data.type == "camera_error"){
+                Swal.fire({
+                    icon: 'error',
+                    title: data.title,
+                    text: data.text,
+                })
+            }
+        }
+
+        function startWebsocket(){
+
+            const form = document.forms['time_to_scan'];
+
+            const time_value = document.getElementById('time_value').value;
+
+            var currentTime = new Date().toLocaleTimeString([], {hour12: false, hour: '2-digit', minute: '2-digit'});
+
+            let [user_hours, user_minutes] = time_value.split(":");
+            let [current_hours, current_minutes] = getTimeForCalculate(currentTime);
+
+            let element = document.getElementById("container-select-time");
+
+            console.log(user_hours)
+            console.log(user_minutes)
+            console.log(current_hours)
+            console.log(current_minutes)
+
+            if( user_hours > current_hours ){
+
+                MemberSocket.send(String(user_hours + ":" + user_minutes));
+                // Change the class
+                // element.className = "hidden";
+                element.innerHTML = "<span class='ml-[41%]'>กำลังเตรียมการสแกนใบหน้า โปรดรอสักครู่ <img src='{% static 'images/loading-gif.webp' %}' alt='' class='w-6 inline ml-2'></span> "
+
+            }else if (user_hours == current_hours ){
+                if( user_minutes > current_minutes ){
+
+                    MemberSocket.send(String(user_hours + ":" + user_minutes));
+
+                    // Change the class
+                    element.innerHTML = "<span class='ml-[41%]'>กำลังเตรียมการสแกนใบหน้า โปรดรอสักครู่ <img src='{% static 'images/loading-gif.webp' %}' alt='' class='w-6 inline ml-2'></span> "
+
+                }else{
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'เวลาที่ตั้งไว้ไม่ถูกต้อง',
+                        text: 'กรุณาตรวจสอบเวลาที่ตั้งไว้ใหม่อีกครั้ง',
+                    })
+                }
+            }else{
+                Swal.fire({
+                    icon: 'error',
+                    title: 'เวลาที่ตั้งไว้ไม่ถูกต้อง',
+                    text: 'กรุณาตรวจสอบเวลาที่ตั้งไว้ใหม่อีกครั้ง',
+                })
+            }
+
+
+        }
+
+        function listNotAttend(){
+            let not_attend = document.getElementById('text-header-enroll');
+            not_attend.innerHTML = "รายชื่อคนที่ไม่เข้าเรียน";
+
+            let not_attend_class = document.getElementById("showMemberCome");
+            not_attend_class.innerHTML = "";
+            not_attend_class.className = "grid grid-cols-1 w-[95%] mx-auto gap-6 md:grid-cols-4 mb-6 z-0 text-center";
+            
+            for (let i = 0; i < memberList.length; i++) {
+                let name = memberList[i].replace("_", " ")
+                not_attend_class.insertAdjacentHTML("beforeend", `
+                <div class="p-4 drop-shadow-xl bg-gray-50">
+                    <p>${name}</p>
+                </div>
+                `);
+            }
+        }
+
+        function listEnroll(){
+            let enrolled = document.getElementById('text-header-enroll');
+            enrolled.innerHTML = "รายชื่อคนที่เข้าเรียน";
+
+            let enrolled_class = document.getElementById("showMemberCome");
+            enrolled_class.innerHTML = "";
+            enrolled_class.className = "grid grid-cols-1 w-[95%] mx-auto gap-6 md:grid-cols-3 mb-6 z-0";
+
+            for (const key in enrolledDict) {
+                enrolled_class.insertAdjacentHTML("beforeend", `
+                <div class="grid grid-cols-3 p-4 drop-shadow-xl bg-gray-50 justify-items-center">
+                    <p>${key}</p>
+                    <p>${enrolledDict[key][0]} น.</p>
+                    <button onclick="Swal.fire({
+                        title: '${key}',
+                        text: '${enrolledDict[key][0]} น.',
+                        imageUrl: '${enrolledDict[key][1]}',
+                        imageWidth: 400,
+                        imageHeight: 300,
+                        imageAlt: 'Custom image',
+                        })" class="text-blue-600 hover:text-blue-500">ตรวจสอบ
+                    </button>
+                </div>
+                `);
+            }
+
+        }
+
+        function getTimeForCalculate(time){
+            let hours = parseInt(time.substring(0, 2));
+            let minutes = time.substring(3, 5);
+            let ampm = time.substring(6, 8);
+
+            if (ampm == "PM") {
+            hours += 12;
+            }
+
+            return [hours, minutes]
+        }
+    </script>
+    {% endif %}
+</section>
+{% endblock %}
